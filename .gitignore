@@ -1,0 +1,7 @@
+backend/DokuMate/bin
+backend/DokuMate/obj
+backend/DokuMate/.idea
+
+frontend/.idea
+frontend/.vscode
+frontend/node_modules
