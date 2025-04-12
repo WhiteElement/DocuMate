@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace DokuMate.PdfDocument;
+namespace DokuMate.Document;
 
 public class PdfDocument
 {

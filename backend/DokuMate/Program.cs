@@ -1,6 +1,6 @@
 using DokuMate.Database;
+using DokuMate.Document;
 using DokuMate.Helpers;
-using DokuMate.PdfDocument;
 using DokuMate.Tag;
 
 namespace DokuMate;
