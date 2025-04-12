@@ -9,7 +9,11 @@ public class MongoDatabase
     
     public MongoDatabase()
     {
-        var mongoClient = new MongoClient($"mongodb://{DotEnv.GetVar("CONNECTION_STRING")}");
-        Db = mongoClient.GetDatabase(DotEnv.GetVar("DATABASE_NAME"));
+        if (!DotEnv.TryGetVar("CONNECTION_STRING", out string connString) ||
+            !DotEnv.TryGetVar("DATABASE_NAME", out string dbName))
+            throw new ArgumentException("ConnectionString or DatabaseName not provided");
+                
+        var mongoClient = new MongoClient($"mongodb://{connString}");
+        Db = mongoClient.GetDatabase(dbName);
     }
 }

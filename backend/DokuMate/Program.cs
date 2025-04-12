@@ -11,6 +11,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        DotEnv.Load(args);
+        
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSingleton<MongoDatabase, MongoDatabase>();
@@ -18,6 +20,9 @@ public class Program
         builder.Services.AddSingleton<DocumentService, DocumentService>();
         builder.Services.AddAuthorization();
         builder.Services.AddOpenApi();
+
+        if (DotEnv.TryGetVar("PORT", out string value))
+            builder.WebHost.UseUrls($"http://localhost:{value}");
 
         var app = builder.Build();
 
@@ -31,10 +36,8 @@ public class Program
         app.UseAuthorization();
         app.MapControllers();
         
-        // TODO: Remove this
-        DotEnv.Load("C:\\Entwicklung\\DocuMate\\dev.env");
-        
-        // TODO: PORT from .env File
         app.Run();
+        
+        // TODO: README
     }
 }

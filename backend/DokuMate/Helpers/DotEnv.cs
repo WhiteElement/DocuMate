@@ -5,8 +5,12 @@ namespace DokuMate.Helpers;
 
 public static class DotEnv
 {
-    public static void Load(string filePath)
+    public static void Load(string[] args)
     {
+        if (args.Length < 1)
+            throw new ArgumentException("No .env file as first argument given");
+
+        string filePath = args[0];
         if (!File.Exists(filePath))
             throw new ArgumentException($"No .env file found at: '{filePath}'");
 
@@ -25,13 +29,17 @@ public static class DotEnv
         }
     }
 
-    public static string GetVar(string variableName)
+    public static bool TryGetVar(string variableName, out string value)
     {
         string? found = Environment.GetEnvironmentVariable(variableName);
 
         if (found == null)
-            throw new KeyNotFoundException($"No Environment Variable found for: '{variableName}'");
+        {
+            value = String.Empty;
+            return false;
+        }
 
-        return found;
+        value = found;
+        return true;
     }
 }
