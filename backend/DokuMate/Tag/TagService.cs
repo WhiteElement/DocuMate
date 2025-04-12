@@ -37,4 +37,10 @@ public class TagService
         var found = await _tagCollection.FindAsync(x => x.Name == dtoName);
         return await found.AnyAsync();
     }
+
+    public async Task<long> DeleteTag(string id)
+    {
+        var result = await _tagCollection.DeleteOneAsync(x => x.Id == id);
+        return result.DeletedCount;
+    }
 }

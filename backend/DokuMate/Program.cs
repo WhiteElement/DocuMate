@@ -1,5 +1,6 @@
 using DokuMate.Database;
 using DokuMate.Helpers;
+using DokuMate.Tag;
 
 namespace DokuMate;
 
@@ -13,6 +14,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
 
         builder.Services.AddSingleton<MongoDatabase, MongoDatabase>();
+        builder.Services.AddSingleton<TagService, TagService>();
         
         // Add services to the container.
         builder.Services.AddAuthorization();
@@ -33,6 +35,7 @@ public class Program
         app.UseAuthorization();
         app.MapControllers();
         
+        // TODO: Remove this
         DotEnv.Load("C:\\Entwicklung\\DocuMate\\dev.env");
 
         app.Run();

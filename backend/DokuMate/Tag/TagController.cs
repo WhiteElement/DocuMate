@@ -1,6 +1,4 @@
-﻿using DokuMate.Database;
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace DokuMate.Tag;
 
@@ -29,4 +27,19 @@ public class TagController : ControllerBase
         
         return Created(String.Empty, await _tagService.CreateNew(dto));
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteTag([FromRoute] string? id)
+    {
+        if (id == null)
+            throw new ArgumentException("No Id for Tag to delete provided");
+        
+        long deleted = await _tagService.DeleteTag(id);
+
+        if (deleted == 0)
+            return NotFound($"No Tag with Id: '{id}' found");
+
+        return Accepted($"Deleted '{id}'");
+    }
+    
 }
