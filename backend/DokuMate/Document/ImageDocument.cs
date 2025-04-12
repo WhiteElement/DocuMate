@@ -1,3 +1,3 @@
-﻿namespace DokuMate.PdfDocument;
+﻿namespace DokuMate.Document;
 
-public record ImageDocument(string Name, string? Info, List<FileInfo>? Images, List<Tag.Tag> Tags);
+public record ImageDocument(string Name, string? Info, List<IFormFile>? Images, List<Tag.Tag>? Tags);

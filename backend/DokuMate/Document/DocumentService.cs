@@ -1,5 +1,5 @@
 ﻿using DokuMate.Database;
-using DokuMate.PdfDocument;
+using DokuMate.Helpers;
 using MongoDB.Driver;
 
 namespace DokuMate.Document;
@@ -34,25 +34,43 @@ public class DocumentService
 
      public async Task<PdfDocument> CreateOne(ImageDocument imageDocument)
      {
-         // Images to PDF
-         // pdfBinary
-         
-         // TODO: OCR
-         // ocrContent
+         if (imageDocument.Images == null || !imageDocument.Images.Any())
+             throw new ArgumentException("No Images for Pdf Conversion provided");
 
-         PdfDocument document = new PdfDocument()
+         PdfConverter? pdfConverter = null;
+         try
          {
-             Name = imageDocument.Name,
-             Info = imageDocument.Info,
-             Tags = imageDocument.Tags,
-             Created = DateTime.Now,
-             // Binary = pdfBinary,
-             // OcrContent = ocrContent
-         };
+             // Tesseract
+             
+             // Images to PDF
+             pdfConverter = new PdfConverter(imageDocument.Name, imageDocument.Images);
+             pdfConverter.ToPdf();
 
-         await _documentCollection.InsertOneAsync(document);
 
-         return document;
+             // pdfBinary
+
+             // TODO: OCR
+             // ocrContent
+
+             PdfDocument document = new PdfDocument()
+             {
+                 Name = imageDocument.Name,
+                 Info = imageDocument.Info,
+                 Tags = imageDocument.Tags,
+                 Created = DateTime.Now,
+                 // Binary = pdfBinary,
+                 // OcrContent = ocrContent
+             };
+
+             await _documentCollection.InsertOneAsync(document);
+
+             return document;
+
+         }
+         finally
+         {
+             pdfConverter?.CleanUp();
+         }
      }
 
      public async Task EditOne(PdfDocument document)
