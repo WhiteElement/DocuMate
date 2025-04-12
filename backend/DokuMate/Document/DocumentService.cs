@@ -28,14 +28,28 @@ public class DocumentService
 
      public async Task<PdfDocumentDTO?> GetOne(string id)
      {
-         PdfDocument found = await _documentCollection
+         if (TryGet(id, out PdfDocument document))
+         {
+             return new PdfDocumentDTO(document.Id, document.Name, document.Info, document.Tags, document.Created);
+         }
+
+         return null;
+     }
+
+     private bool TryGet(string id, out PdfDocument document)
+     {
+         PdfDocument found = _documentCollection
              .Find(x => x.Id == id)
-             .FirstOrDefaultAsync();
+             .FirstOrDefault();
 
          if (found == null)
-             return null;
-
-         return new PdfDocumentDTO(found.Id, found.Name, found.Info, found.Tags, found.Created);
+         {
+             document = null;
+             return false;
+         }
+         
+         document = found;
+         return true;
      }
 
      public async Task<PdfDocument> CreateOne(ImageDocument imageDocument)
@@ -85,5 +99,14 @@ public class DocumentService
      {
          await _documentCollection.DeleteManyAsync(_ => true);
      }
-      
+
+     public PdfDocument Download(string id)
+     {
+         if (TryGet(id, out PdfDocument document))
+         {
+             return document;
+         }
+
+         return null;
+     }
 }

@@ -33,6 +33,16 @@ public class DocumentController : ControllerBase
         return Ok(found);
     }
     
+    [HttpGet("{id}/download")]
+    public ActionResult Download([FromRoute] string id)
+    {
+        PdfDocument found = _documentService.Download(id);
+        return new FileContentResult(found.Binary.AsByteArray, "application/pdf")
+        {
+            FileDownloadName = $"{found.Name}.pdf"
+        };
+    }
+    
     //
     // POST
     //
