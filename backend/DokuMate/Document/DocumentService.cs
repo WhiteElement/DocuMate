@@ -38,38 +38,31 @@ public class DocumentService
          if (imageDocument.Images == null || !imageDocument.Images.Any())
              throw new ArgumentException("No Images for Pdf Conversion provided");
 
-         PdfConverter? pdfConverter = null;
-         try
+         // Images to PDF
+         PdfConverter pdfConverter = new PdfConverter(imageDocument.Name, imageDocument.Images, false);
+         pdfConverter.DocumentScan();
+         string pdf = pdfConverter.ToPdf();
+
+         Task<byte[]> pdfBinaryTask = File.ReadAllBytesAsync(pdf);
+
+         // TODO: OCR
+         // Tesseract
+         // ocrContent
+
+         PdfDocument document = new PdfDocument()
          {
-             // Images to PDF
-             pdfConverter = new PdfConverter(imageDocument.Name, imageDocument.Images);
-             pdfConverter.DocumentScan();
-             string pdf = pdfConverter.ToPdf();
+             Name = imageDocument.Name,
+             Info = imageDocument.Info,
+             Tags = imageDocument.Tags,
+             Created = DateTime.Now,
+             Binary = new BsonBinaryData(await pdfBinaryTask),
+             // OcrContent = ocrContent
+         };
 
-             Task<byte[]> pdfBinaryTask = File.ReadAllBytesAsync(pdf);
+         await _documentCollection.InsertOneAsync(document);
+         pdfConverter.CleanUp();
 
-             // TODO: OCR
-             // Tesseract
-             // ocrContent
-
-             PdfDocument document = new PdfDocument()
-             {
-                 Name = imageDocument.Name,
-                 Info = imageDocument.Info,
-                 Tags = imageDocument.Tags,
-                 Created = DateTime.Now,
-                 Binary = new BsonBinaryData(await pdfBinaryTask),
-                 // OcrContent = ocrContent
-             };
-
-             await _documentCollection.InsertOneAsync(document);
-
-             return document;
-         }
-         finally
-         {
-             pdfConverter?.CleanUp();
-         }
+         return document;
      }
 
      public async Task EditOne(PdfDocument document)
