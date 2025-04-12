@@ -13,14 +13,34 @@ public class DocumentController : ControllerBase
         _documentService = documentService;
     }
     
-    // public List<PdfDocument> GetAll()
-    // {
-    //     
-    // }
-
-    [HttpPost]
-    public async Task<PdfDocument> CreateNew([FromForm] ImageDocument imageDocument)
+    //
+    // GET
+    //
+    
+    [HttpGet]
+    public async Task<List<PdfDocumentDTO>> GetAll()
     {
-        return await _documentService.CreateOne(imageDocument);
+        return await _documentService.GetAll();
+    }
+
+    //
+    // POST
+    //
+    
+    [HttpPost]
+    public async Task<PdfDocumentDTO> CreateNew([FromForm] ImageDocument imageDocument)
+    {
+        PdfDocument document = await _documentService.CreateOne(imageDocument);
+        return new PdfDocumentDTO( document.Id, document.Name, document.Info, document.Tags, document.Created );
+    }
+    
+    //
+    // DELETE
+    //
+
+    [HttpDelete]
+    public async Task DeleteAll()
+    {
+        await _documentService.DeleteAll();
     }
 }

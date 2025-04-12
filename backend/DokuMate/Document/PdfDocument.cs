@@ -11,7 +11,7 @@ public class PdfDocument
     public string Name { get; set; }
     public string? Info { get; set; }
     public List<Tag.Tag> Tags { get; set; }
-    public FileInfo Binary { get; set; }
+    public BsonBinaryData Binary { get; set; }
     public string? OcrContent { get; set; }
     public DateTime Created { get; set; }
 }

@@ -1,5 +1,6 @@
 ﻿using DokuMate.Database;
 using DokuMate.Helpers;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace DokuMate.Document;
@@ -40,15 +41,12 @@ public class DocumentService
          PdfConverter? pdfConverter = null;
          try
          {
-             
-             
              // Images to PDF
              pdfConverter = new PdfConverter(imageDocument.Name, imageDocument.Images);
              pdfConverter.DocumentScan();
-             pdfConverter.ToPdf();
+             string pdf = pdfConverter.ToPdf();
 
-
-             // pdfBinary
+             Task<byte[]> pdfBinaryTask = File.ReadAllBytesAsync(pdf);
 
              // TODO: OCR
              // Tesseract
@@ -60,14 +58,13 @@ public class DocumentService
                  Info = imageDocument.Info,
                  Tags = imageDocument.Tags,
                  Created = DateTime.Now,
-                 // Binary = pdfBinary,
+                 Binary = new BsonBinaryData(await pdfBinaryTask),
                  // OcrContent = ocrContent
              };
 
              await _documentCollection.InsertOneAsync(document);
 
              return document;
-
          }
          finally
          {

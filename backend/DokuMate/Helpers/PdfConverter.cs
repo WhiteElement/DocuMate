@@ -6,7 +6,7 @@ namespace DokuMate.Helpers;
 
 public class PdfConverter
 {
-    private readonly List<FileInfo> _images;
+    private List<FileInfo> _images;
     private readonly string _name;
     private FileInfo _pdf;
 
@@ -55,8 +55,27 @@ public class PdfConverter
 
     public void CleanUp()
     {
-        _images.ForEach(image => image.Delete());
-        // _pdf.Delete();
+        _images.ForEach(image =>
+            {
+                try
+                {
+                    image.Delete();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
+        );
+        
+        try
+        {
+            _pdf.Delete();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
     }
 
     public void DocumentScan()
@@ -68,5 +87,14 @@ public class PdfConverter
             OutputFilePath = new DirectoryInfo(_tempFolder)
         };
         string[] outputFiles = imageProcessor.DocumentScan();
+        ReplaceInputWithScans(outputFiles);
+    }
+
+    private void ReplaceInputWithScans(string[] scans)
+    {
+        _images.ForEach(image => image.Delete());
+        _images = scans
+            .Select(scan => new FileInfo(scan))
+            .ToList();
     }
 }
