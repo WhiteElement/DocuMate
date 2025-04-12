@@ -6,8 +6,8 @@ namespace DokuMate.PdfDocument;
 [Route("[controller]")]
 public class DocumentController : ControllerBase
 {
-    public async Task<string> test()
+    public List<PdfDocument> GetAll()
     {
-        return "yeeees";
+        
     }
 }

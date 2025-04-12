@@ -1,5 +1,6 @@
 using DokuMate.Database;
 using DokuMate.Helpers;
+using DokuMate.PdfDocument;
 using DokuMate.Tag;
 
 namespace DokuMate;
@@ -15,6 +16,7 @@ public class Program
 
         builder.Services.AddSingleton<MongoDatabase, MongoDatabase>();
         builder.Services.AddSingleton<TagService, TagService>();
+        builder.Services.AddSingleton<DocumentService, DocumentService>();
         
         // Add services to the container.
         builder.Services.AddAuthorization();

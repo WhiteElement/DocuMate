@@ -1,5 +1,4 @@
 ﻿using DokuMate.Database;
-using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 
 namespace DokuMate.Tag;
