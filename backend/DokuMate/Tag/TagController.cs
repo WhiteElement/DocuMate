@@ -8,34 +8,25 @@ namespace DokuMate.Tag;
 [Route("[controller]")]
 public class TagController : ControllerBase
 {
-    private readonly IMongoCollection<Tag> _tagCollection;
-    private const string CollectionName = "Tags";
+    private readonly TagService _tagService;
 
-    public TagController(MongoDatabase mongoDatabase)
+    public TagController(TagService tagService)
     {
-        _tagCollection = mongoDatabase.Db.GetCollection<Tag>(CollectionName);
+        _tagService = tagService;
     }
     
     [HttpGet]
     public async Task<List<Tag>> GetAll()
     {
-        return await _tagCollection.Find(_ => true)
-            .ToListAsync();
+        return await _tagService.GetAll();
     }
 
     [HttpPost]
     public async Task<ActionResult> CreateNew([FromBody] TagDTO dto)
     {
-        Tag newTag = new Tag()
-        {
-            Name = dto.Name
-        };
-
-        if (await (await _tagCollection.FindAsync(x => x.Name == dto.Name)).AnyAsync())
+        if (await _tagService.NameAlreadyTaken(dto.Name))
             return Conflict($"Tag with Name '{dto.Name}' already exists");
         
-        
-        await _tagCollection.InsertOneAsync(newTag);
-        return Created(String.Empty, newTag);
+        return Created(String.Empty, await _tagService.CreateNew(dto));
     }
 }
