@@ -3,8 +3,8 @@ backend/DokuMate/obj
 backend/DokuMate/.idea
 backend/DokuMate/DokuMate.sln.DotSettings.user
 
-frontend/.idea
-frontend/.vscode
-frontend/node_modules
+frontend/frontend/.idea
+frontend/frontend/.vscode
+frontend/frontend/node_modules
 
 *.env

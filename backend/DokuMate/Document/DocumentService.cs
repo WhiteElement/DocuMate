@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using DokuMate.Database;
+﻿using DokuMate.Database;
 using DokuMate.Helpers;
-using IronOcr;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -63,21 +61,13 @@ public class DocumentService
          pdfConverter.DocumentScan();
          string pdf = pdfConverter.ToPdf();
 
-         Task<byte[]> pdfBinaryTask = File.ReadAllBytesAsync(pdf);
-
-         
-         
-         // TODO: OCR
-         // Tesseract
-         // ocrContent
-
          PdfDocument document = new PdfDocument()
          {
              Name = $"{imageDocument.Name}.pdf",
              Info = imageDocument.Info,
              Tags = imageDocument.Tags ?? new List<Tag.Tag>(),
              Created = DateTime.Now,
-             Binary = new BsonBinaryData(await pdfBinaryTask),
+             Binary = new BsonBinaryData(await File.ReadAllBytesAsync(pdf)),
          };
 
          await _documentCollection.InsertOneAsync(document);
