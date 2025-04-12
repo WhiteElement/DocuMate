@@ -35,6 +35,7 @@ public class PdfConverter
 
     public string ToPdf()
     {
+        // TODO: Schauen, dass es keine weißen Ränder gibt
         _pdf = new FileInfo(Path.Combine(_tempFolder, _name));
         _tracker.Add(_pdf);
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter(_pdf));

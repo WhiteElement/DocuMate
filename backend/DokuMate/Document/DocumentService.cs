@@ -70,7 +70,7 @@ public class DocumentService
 
          PdfDocument document = new PdfDocument()
          {
-             Name = imageDocument.Name,
+             Name = $"{imageDocument.Name}.pdf",
              Info = imageDocument.Info,
              Tags = imageDocument.Tags ?? new List<Tag.Tag>(),
              Created = DateTime.Now,

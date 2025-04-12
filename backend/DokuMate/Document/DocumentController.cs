@@ -39,7 +39,7 @@ public class DocumentController : ControllerBase
         PdfDocument found = _documentService.Download(id);
         return new FileContentResult(found.Binary.AsByteArray, "application/pdf")
         {
-            FileDownloadName = $"{found.Name}.pdf"
+            FileDownloadName = found.Name
         };
     }
     
