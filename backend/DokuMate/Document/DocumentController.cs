@@ -12,17 +12,27 @@ public class DocumentController : ControllerBase
     {
         _documentService = documentService;
     }
-    
+
     //
     // GET
     //
-    
+
     [HttpGet]
     public async Task<List<PdfDocumentDTO>> GetAll()
     {
         return await _documentService.GetAll();
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<PdfDocumentDTO>> GetOne([FromRoute] string id)
+    {
+        PdfDocumentDTO? found = await _documentService.GetOne(id);
+        if (found == null)
+            return NotFound();
+        
+        return Ok(found);
+    }
+    
     //
     // POST
     //

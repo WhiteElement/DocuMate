@@ -26,11 +26,16 @@ public class DocumentService
              .ToList();
      }
 
-     public async Task<PdfDocument?> GetOne(string id)
+     public async Task<PdfDocumentDTO?> GetOne(string id)
      {
-         return await _documentCollection
+         PdfDocument found = await _documentCollection
              .Find(x => x.Id == id)
              .FirstOrDefaultAsync();
+
+         if (found == null)
+             return null;
+
+         return new PdfDocumentDTO(found.Id, found.Name, found.Info, found.Tags, found.Created);
      }
 
      public async Task<PdfDocument> CreateOne(ImageDocument imageDocument)
@@ -53,7 +58,7 @@ public class DocumentService
          {
              Name = imageDocument.Name,
              Info = imageDocument.Info,
-             Tags = imageDocument.Tags,
+             Tags = imageDocument.Tags ?? new List<Tag.Tag>(),
              Created = DateTime.Now,
              Binary = new BsonBinaryData(await pdfBinaryTask),
              // OcrContent = ocrContent
