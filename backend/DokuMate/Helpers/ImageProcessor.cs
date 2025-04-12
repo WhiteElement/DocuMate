@@ -9,12 +9,10 @@ public class ImageProcessor
     public bool GenerateIntermediateFiles { get; set; }
     public FileInfo[] InputFiles { get; set; }
     public DirectoryInfo OutputFilePath { get; set; }
-    // public Size Resize { get; set; }
-
 
 
     /// <summary>
-    /// Performs a document scan operation on the input image.
+    /// Performs a document scan operation on the input images.
     /// </summary>
     /// <returns>An array of output file paths.</returns>
     public string[] DocumentScan()
@@ -25,17 +23,17 @@ public class ImageProcessor
                 if (string.IsNullOrEmpty(file.Name) || HasFalseFileExtension(file.Name))
                     throw new ArgumentException($"inputFilePath {file.Name} does not have the right file extension (.jpg, .jpeg, .png)");
 
-                using var inputImage = Cv2.ImRead(file.FullName);
-                using var preprocessedImage = PreProcess(inputImage);
-                var contours = FindTopContours(preprocessedImage);
+                using Mat inputImage = Cv2.ImRead(file.FullName);
+                using Mat preprocessedImage = PreProcess(inputImage);
+                List<Point[]> contours = FindTopContours(preprocessedImage);
 
-                if (this.GenerateIntermediateFiles)
+                if (GenerateIntermediateFiles)
                     GenerateContourImage(inputImage, contours, file);
 
-                var contourPoints = FindBiggestContour(contours);
-                var sortedPoints = SortPoints(contourPoints);
+                Point[] contourPoints = FindBiggestContour(contours);
+                Point[] sortedPoints = SortPoints(contourPoints);
 
-                using var warpedImage = WarpImage(inputImage, sortedPoints);
+                using Mat warpedImage = WarpImage(inputImage, sortedPoints);
                 string fileName = FileName("output", file);
 
                 if (Cv2.ImWrite(fileName, warpedImage))
@@ -57,23 +55,20 @@ public class ImageProcessor
         var pts1 = new Point2f[] { contourPoints[0], contourPoints[1], contourPoints[2], contourPoints[3] };
         var pts2 = new Point2f[]
         {
-            new Point2f(0, 0),
-            new Point2f((float)warpedSize.Width, 0),
-            new Point2f(0, (float)warpedSize.Height),
-            new Point2f((float)warpedSize.Width, (float)warpedSize.Height)
+            new (0, 0),
+            new (warpedSize.Width, 0),
+            new (0, warpedSize.Height),
+            new (warpedSize.Width, warpedSize.Height)
         };
 
-        using var matrix = Cv2.GetPerspectiveTransform(pts1, pts2);
-        using var warpedImage = new Mat();
+        using Mat matrix = Cv2.GetPerspectiveTransform(pts1, pts2);
+        using Mat warpedImage = new Mat();
         Cv2.WarpPerspective(inputImage, warpedImage, matrix, warpedSize);
-
-        // if (resize != null)
-        //     Cv2.Resize(warpedImage, warpedImage, resize);
 
         return warpedImage.Clone();
     }
 
-    private OpenCvSharp.Size CalculateDocumentSize(Point[] contourPoints)
+    private Size CalculateDocumentSize(Point[] contourPoints)
     {
         double width = Math.Sqrt(
             Math.Pow(contourPoints[0].X - contourPoints[1].X, 2) +
@@ -84,12 +79,12 @@ public class ImageProcessor
             Math.Pow(contourPoints[0].Y - contourPoints[2].Y, 2)
         );
 
-        return new OpenCvSharp.Size(width, height);
+        return new Size(width, height);
     }
 
     private void GenerateContourImage(Mat inputImage, List<Point[]> contours, System.IO.FileInfo file)
     {
-        using var contourImage = inputImage.Clone();
+        using Mat contourImage = inputImage.Clone();
         Cv2.DrawContours(contourImage, contours, -1, new Scalar(255, 0, 255), 3);
         Cv2.ImWrite(FileName("contour", file), contourImage);
     }
@@ -138,7 +133,7 @@ public class ImageProcessor
         return blurred.Clone();
     }
 
-    private static Point[] SortPoints(Point[] points)
+    private Point[] SortPoints(Point[] points)
     {
         var sortedByY = points.OrderBy(p => p.Y).ToArray();
         var sortedPoints = new Point[4];

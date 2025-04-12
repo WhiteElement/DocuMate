@@ -35,11 +35,11 @@ public class PdfConverter
 
     public string ToPdf()
     {
-        // TODO: Schauen, dass es keine weißen Ränder gibt
         _pdf = new FileInfo(Path.Combine(_tempFolder, _name));
         _tracker.Add(_pdf);
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter(_pdf));
         iText.Layout.Document document = new iText.Layout.Document(pdfDocument);
+        document.SetMargins(0, 0, 0, 0);
 
         try
         {
@@ -47,7 +47,7 @@ public class PdfConverter
             {
                 ImageData imageData = ImageDataFactory.Create(imageInfo.FullName);
                 Image image = new Image(imageData);
-                image.SetWidth(pdfDocument.GetDefaultPageSize().GetWidth() - 50);
+                image.SetWidth(pdfDocument.GetDefaultPageSize().GetWidth());
                 image.SetAutoScaleHeight(true);
                 document.Add(image);
             });

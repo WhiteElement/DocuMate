@@ -1,5 +1,7 @@
-﻿using DokuMate.Database;
+﻿using System.Diagnostics;
+using DokuMate.Database;
 using DokuMate.Helpers;
+using IronOcr;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -57,13 +59,14 @@ public class DocumentService
          if (imageDocument.Images == null || !imageDocument.Images.Any())
              throw new ArgumentException("No Images for Pdf Conversion provided");
 
-         // Images to PDF
          PdfConverter pdfConverter = new PdfConverter(imageDocument.Name, imageDocument.Images, false);
          pdfConverter.DocumentScan();
          string pdf = pdfConverter.ToPdf();
 
          Task<byte[]> pdfBinaryTask = File.ReadAllBytesAsync(pdf);
 
+         
+         
          // TODO: OCR
          // Tesseract
          // ocrContent
@@ -75,13 +78,23 @@ public class DocumentService
              Tags = imageDocument.Tags ?? new List<Tag.Tag>(),
              Created = DateTime.Now,
              Binary = new BsonBinaryData(await pdfBinaryTask),
-             // OcrContent = ocrContent
          };
 
          await _documentCollection.InsertOneAsync(document);
-         pdfConverter.CleanUp();
+         _ = Task.Run(() => AddOcrAsync(document, pdf, pdfConverter));
 
          return document;
+     }
+
+     private async Task AddOcrAsync(PdfDocument document, string pdf, PdfConverter pdfConverter)
+     {
+         OpticalCharacterRecognizer ocr = new OpticalCharacterRecognizer() { Pdf = pdf };
+         document.OcrContent = ocr.DoOcr();
+
+         await _documentCollection.ReplaceOneAsync(x => x.Id == document.Id, document);
+         Console.WriteLine($"Updated {document.Id}");
+         
+         pdfConverter.CleanUp();
      }
 
      public async Task EditOne(PdfDocument document)
