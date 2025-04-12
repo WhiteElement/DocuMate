@@ -40,16 +40,18 @@ public class DocumentService
          PdfConverter? pdfConverter = null;
          try
          {
-             // Tesseract
+             
              
              // Images to PDF
              pdfConverter = new PdfConverter(imageDocument.Name, imageDocument.Images);
+             pdfConverter.DocumentScan();
              pdfConverter.ToPdf();
 
 
              // pdfBinary
 
              // TODO: OCR
+             // Tesseract
              // ocrContent
 
              PdfDocument document = new PdfDocument()

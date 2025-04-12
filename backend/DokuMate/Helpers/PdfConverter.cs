@@ -58,4 +58,15 @@ public class PdfConverter
         _images.ForEach(image => image.Delete());
         // _pdf.Delete();
     }
+
+    public void DocumentScan()
+    {
+        ImageProcessor imageProcessor = new ImageProcessor()
+        {
+            GenerateIntermediateFiles = true,
+            InputFiles = _images.ToArray(),
+            OutputFilePath = new DirectoryInfo(_tempFolder)
+        };
+        string[] outputFiles = imageProcessor.DocumentScan();
+    }
 }
