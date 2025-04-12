@@ -9,11 +9,11 @@ namespace DokuMate.Tag;
 public class TagController : ControllerBase
 {
     private readonly IMongoCollection<Tag> _tagCollection;
+    private const string CollectionName = "Tags";
 
     public TagController(MongoDatabase mongoDatabase)
     {
-        // TODO: Magic String
-        _tagCollection = mongoDatabase.Db.GetCollection<Tag>("Tags");
+        _tagCollection = mongoDatabase.Db.GetCollection<Tag>(CollectionName);
     }
     
     [HttpGet]

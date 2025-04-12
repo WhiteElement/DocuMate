@@ -1,4 +1,5 @@
 using DokuMate.Database;
+using DokuMate.Helpers;
 
 namespace DokuMate;
 
@@ -31,6 +32,8 @@ public class Program
 
         app.UseAuthorization();
         app.MapControllers();
+        
+        DotEnv.Load("C:\\Entwicklung\\DocuMate\\dev.env");
 
         app.Run();
     }
