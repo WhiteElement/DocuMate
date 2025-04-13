@@ -18,10 +18,14 @@
       </div>
 
       <div class="tags">
-        <div class="tag">#Rechnung</div>
-        <div class="tag">#Vertrag</div>
-        <div class="tag">#Genehmigt</div>
-        <div class="tag">#Offen</div>
+        @for (tag of tags; track tag.id) {
+        <div class="tag">{{ tag.name }}</div>
+
+        }
+        <!--<div class="tag">#Rechnung</div>-->
+        <!--<div class="tag">#Vertrag</div>-->
+        <!--<div class="tag">#Genehmigt</div>-->
+        <!--<div class="tag">#Offen</div>-->
       </div>
 
       <div class="results">
@@ -29,7 +33,7 @@
         <div class="result-item">
           <div class="result-title">{{ document.name }}</div>
           <!--<div class="result-tags">{{ document.tags }}</div>-->
-          <div class="result-date">Erstellt:{{ document.created }}</div>
+          <div class="result-date">Erstellt:{{ document.created | date:'dd/MM/yyyy' }}</div>
         </div>
         }
       </div>
