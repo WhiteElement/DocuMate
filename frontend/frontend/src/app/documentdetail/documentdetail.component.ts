@@ -31,23 +31,37 @@ export class DocumentdetailComponent implements OnInit {
 
       forkJoin([getDoc, getTags]).subscribe(([doc, tagsResponse]) => {
         this.document = doc;
-
-        const bodyTags = doc.tags.map(x => x.name);
-        const allTags = tagsResponse.body;
-        const filteredTags = allTags.filter(t => !bodyTags.includes(t.name));
-        this.tags = filteredTags;
+        this.tags = this.remainingTags(doc, tagsResponse.body);
       });
     });
   }
 
   addToDocument(tag: Tag) {
-    this.documentService.updateOne(this.document, tag).subscribe(res => {
+    const docCopy = JSON.parse(JSON.stringify(this.document));
+    docCopy.tags.push(tag);
+    this.documentService.updateOne(docCopy).subscribe(res => {
+      if (res.status === 200) {
+        this.document = docCopy;
+        this.tags = this.tags.filter(t => t != tag);
+      }
     });
-    this.tags = this.tags.filter(t => t != tag);
   }
 
   removeTag(tag: Tag) {
+    const docCopy: DocumentOverview = JSON.parse(JSON.stringify(this.document));
+    docCopy.tags = docCopy.tags.filter(t => t.name != tag.name);
+    this.documentService.updateOne(docCopy).subscribe(res => {
+      if (res.status === 200) {
+        this.document = docCopy;
+        this.tags = this.remainingTags(docCopy, this.tags);
+      }
+    });
+  }
 
+  remainingTags(document: DocumentOverview, tags: Tag[]) {
+    const bodyTags = document.tags.map(x => x.name);
+    const allTags = tags
+    return allTags.filter(t => !bodyTags.includes(t.name));
   }
 
 

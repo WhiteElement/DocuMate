@@ -28,9 +28,7 @@ export class DocumentService {
     return this.http.post<DocumentOverview>(this.baseUrl, formData);
   }
 
-  updateOne(document: DocumentOverview, tag: Tag): Observable<HttpResponse<Object>> {
-    document.tags.push(tag);
-
+  updateOne(document: DocumentOverview): Observable<HttpResponse<Object>> {
     const url = `${this.baseUrl}/${document.id}`;
     return this.http.put(url, JSON.stringify(document), {
       headers: {

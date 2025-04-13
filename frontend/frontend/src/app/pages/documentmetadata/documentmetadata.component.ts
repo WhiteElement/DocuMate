@@ -21,7 +21,6 @@ export class DocumentmetadataComponent {
 
   constructor(private uploadstateService: UploadstateService, private documentService: DocumentService, private router: Router) {
     this.files = this.uploadstateService.getCurrentFiles();
-    console.log("inmetadata", this.uploadstateService.getCurrentFiles());
   }
 
   uploadDocument(): void {
