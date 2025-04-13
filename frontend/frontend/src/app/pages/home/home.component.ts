@@ -4,7 +4,6 @@ import { DocumentService } from '../../../service/document.service';
 import { UploadstateService } from '../../../service/uploadstate.service';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { forkJoin, merge } from 'rxjs';
 import { TagService } from '../../../service/tag.service';
 import { Tag } from '../../../model/tag.model';
 
@@ -32,12 +31,6 @@ export class HomeComponent implements OnInit {
     this.tagService.getAll().subscribe(tagResponse => {
       this.tags = tagResponse.body;
     });
-
-
-    //forkJoin([allDocs, allTags]).subscribe(([docs, tagResponse]) => {
-    //  this.documents = docs;
-    //  this.tags = tagResponse.body;
-    //})
   }
 
 
@@ -45,9 +38,11 @@ export class HomeComponent implements OnInit {
     const files = fileInput.files;
 
     this.uploadstateService.setCurrentFiles(Array.from(files));
-    console.log("set", this.uploadstateService.getCurrentFiles());
-
     this.router.navigate(['metadata']);
+  }
+
+  toDetailsPage(id: string) {
+    this.router.navigate(['/document', id]);
   }
 
 }
