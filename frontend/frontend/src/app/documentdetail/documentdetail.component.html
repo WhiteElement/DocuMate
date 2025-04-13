@@ -15,44 +15,41 @@
 
     <div class="tooltip">
       <pre>{{ document.ocrContent }}</pre>
-
     </div>
   </div>
 
   <div class="pdf-preview">
-    PREVIEW
-    <!--<iframe [src]="pdfUrl | safe" width="100%" height="400px"></iframe>-->
-  </div>
+    <embed [src]="pdfUrl" width="400" height="500" type="application/pdf" />
+    <div>
 
-  <div class="tag-manager">
-    <div class="assigned-tags">
-      <h3>Zugewiesene Tags</h3>
+      <div class="tag-manager">
+        <div class="assigned-tags">
+          <h3>Zugewiesene Tags</h3>
 
-      @for (tag of document.tags; track tag.id) {
-      <div class="tag-chip assigned" (click)="removeTag(tag)">{{ tag.name }}</div>
-      }
-    </div>
+          @for (tag of document.tags; track tag.id) {
+          <div class="tag-chip assigned" (click)="removeTag(tag)">{{ tag.name }}</div>
+          }
+        </div>
 
-    <div class="available-tags">
-      <h3>
-        Verfügbare Tags
-        <button class="small-btn" (click)="toggleAddTagInput()">➕</button>
-      </h3>
+        <div class="available-tags">
+          <h3>
+            Verfügbare Tags
+            <button class="small-btn" (click)="toggleAddTagInput()">➕</button>
+          </h3>
 
-      @if (showAddTagInput) {
-      <div class="tag-input-row">
-        <input [(ngModel)]="newTagName" placeholder="Neues Tag..." />
-        <button class="small-btn" (click)="createTag()">Hinzufügen</button>
-      </div>
-      }
+          @if (showAddTagInput) {
+          <div class="tag-input-row">
+            <input [(ngModel)]="newTagName" placeholder="Neues Tag..." />
+            <button class="small-btn" (click)="createTag()">Hinzufügen</button>
+          </div>
+          }
 
-      <!--<div class="tag-chip available" *ngFor="let tag of allTags" (click)="addTag(tag)">-->
-      @for (tag of tags; track tag.id) {
-      <div class="tag-chip available" (click)="addToDocument(tag)">{{ tag.name }}</div>
-      }
-      <!--<div class="tag-chip available" *ngFor="let tag of allTags">-->
-      <!--  {{ tag }}-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</div>-->
+          @for (tag of tags; track tag.id) {
+          <div class="tag-chip available" (click)="addToDocument(tag)">{{ tag.name }}</div>
+          }
+          <!--<div class="tag-chip available" *ngFor="let tag of allTags">-->
+          <!--  {{ tag }}-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->

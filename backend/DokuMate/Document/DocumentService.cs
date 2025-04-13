@@ -22,7 +22,7 @@ public class DocumentService
              .ToListAsync();
 
          return documents
-             .Select(d => new PdfDocumentDTO( d.Id, d.Name, d.Info, d.Tags, d.Created ))
+             .Select(d => new PdfDocumentDTO( d.Id, d.Name, d.Info, d.Tags, d.Created, null ))
              .ToList();
      }
 
@@ -30,7 +30,7 @@ public class DocumentService
      {
          if (TryGet(id, out PdfDocument document))
          {
-             return new PdfDocumentDTO(document.Id, document.Name, document.Info, document.Tags, document.Created);
+             return new PdfDocumentDTO(document.Id, document.Name, document.Info, document.Tags, document.Created, document.OcrContent );
          }
 
          return null;
@@ -79,10 +79,12 @@ public class DocumentService
      private async Task AddOcrAsync(PdfDocument document, string pdf, PdfConverter pdfConverter)
      {
          OpticalCharacterRecognizer ocr = new OpticalCharacterRecognizer() { Pdf = pdf };
+         Console.WriteLine("started ocr");
          document.OcrContent = ocr.DoOcr();
+         Console.WriteLine("finished ocr");
 
          await _documentCollection.ReplaceOneAsync(x => x.Id == document.Id, document);
-         Console.WriteLine($"Updated {document.Id}");
+         Console.WriteLine($"Updated {document.Id}, added ocr\n{document.OcrContent}");
          
          pdfConverter.CleanUp();
      }

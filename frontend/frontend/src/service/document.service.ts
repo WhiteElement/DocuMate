@@ -28,6 +28,13 @@ export class DocumentService {
     return this.http.post<DocumentOverview>(this.baseUrl, formData);
   }
 
+  download(id: string): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/${id}/download`, {
+      responseType: 'blob'
+    })
+  }
+
+
   updateOne(document: DocumentOverview): Observable<HttpResponse<Object>> {
     const url = `${this.baseUrl}/${document.id}`;
     return this.http.put(url, JSON.stringify(document), {

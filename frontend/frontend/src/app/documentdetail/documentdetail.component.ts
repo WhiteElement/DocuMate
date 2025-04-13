@@ -6,6 +6,7 @@ import { Tag } from '../../model/tag.model';
 import { TagService } from '../../service/tag.service';
 import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-documentdetail',
@@ -16,19 +17,23 @@ import { FormsModule } from '@angular/forms';
 })
 export class DocumentdetailComponent implements OnInit {
 
+  // TODO: pipe null-values in document.info
+
   document: DocumentOverview;
   tags: Tag[];
 
   showAddTagInput = false;
   newTagName = '';
+  pdfUrl: SafeResourceUrl;
 
-  constructor(private documentService: DocumentService, private tagService: TagService, private route: ActivatedRoute) {
+  constructor(private documentService: DocumentService, private tagService: TagService, private route: ActivatedRoute, private sanitizer: DomSanitizer) {
 
   }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
+      this.pdfUrl = `api/document/${id}/download`;
 
       const getDoc = this.documentService.getOne(id);
       const getTags = this.tagService.getAll();
@@ -37,6 +42,12 @@ export class DocumentdetailComponent implements OnInit {
         this.document = doc;
         this.tags = this.remainingTags(doc, tagsResponse.body);
       });
+
+      this.documentService.download(id).subscribe(blob => {
+        const url = URL.createObjectURL(blob);
+        this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+
+      })
     });
   }
 

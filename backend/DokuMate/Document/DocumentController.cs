@@ -63,7 +63,7 @@ public class DocumentController : ControllerBase
     public async Task<PdfDocumentDTO> CreateNew([FromForm] ImageDocument imageDocument)
     {
         PdfDocument document = await _documentService.CreateOne(imageDocument);
-        return new PdfDocumentDTO( document.Id, document.Name, document.Info, document.Tags, document.Created );
+        return new PdfDocumentDTO( document.Id, document.Name, document.Info, document.Tags, document.Created, null );
     }
     
     //
