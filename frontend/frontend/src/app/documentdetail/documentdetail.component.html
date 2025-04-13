@@ -27,19 +27,21 @@
   <div class="tag-manager">
     <div class="assigned-tags">
       <h3>Zugewiesene Tags</h3>
-      <div class="tag-chip assigned" *ngFor="let tag of document.tags">
-        {{ tag }}
-        <!--<span (click)="removeTag(tag)">✖</span>-->
-      </div>
+
+      @for (tag of document.tags; track tag.id) {
+      <div class="tag-chip assigned" (click)="removeTag(tag)">{{ tag.name }}</div>
+      }
     </div>
 
     <div class="available-tags">
       <h3>Verfügbare Tags</h3>
       <!--<div class="tag-chip available" *ngFor="let tag of allTags" (click)="addTag(tag)">-->
-      <div class="tag-chip available" *ngFor="let tag of allTags">
-        {{ tag }}
-      </div>
-    </div>
-  </div>
-
-</div>
+      @for (tag of tags; track tag.id) {
+      <div class="tag-chip available" (click)="addToDocument(tag)">{{ tag.name }}</div>
+      }
+      <!--<div class="tag-chip available" *ngFor="let tag of allTags">-->
+      <!--  {{ tag }}-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</div>-->
