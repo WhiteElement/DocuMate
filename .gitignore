@@ -6,5 +6,7 @@ backend/DokuMate/DokuMate.sln.DotSettings.user
 frontend/frontend/.idea
 frontend/frontend/.vscode
 frontend/frontend/node_modules
+frontend/frontend/.angular
+
 
 *.env
