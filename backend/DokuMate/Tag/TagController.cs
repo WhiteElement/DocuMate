@@ -3,7 +3,7 @@
 namespace DokuMate.Tag;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class TagController : ControllerBase
 {
     private readonly TagService _tagService;

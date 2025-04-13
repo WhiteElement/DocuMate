@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DocumentService {
-  private baseUrl: string = 'document';
+  private baseUrl: string = 'api/document';
 
   constructor(private http: HttpClient) { }
 
@@ -15,5 +15,7 @@ export class DocumentService {
     return this.http.get<DocumentOverview[]>(this.baseUrl)
   }
 
-
+  createOne(formData: FormData): Observable<DocumentOverview> {
+    return this.http.post<DocumentOverview>(this.baseUrl, formData);
+  }
 }

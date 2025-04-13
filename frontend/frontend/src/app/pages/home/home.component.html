@@ -28,8 +28,8 @@
         @for (document of documents; track document.id) {
         <div class="result-item">
           <div class="result-title">{{ document.name }}</div>
-          <div class="result-tags">{{ document.tags }}</div>
-          <div class="result-date">{{ document.created }}</div>
+          <!--<div class="result-tags">{{ document.tags }}</div>-->
+          <div class="result-date">Erstellt:{{ document.created }}</div>
         </div>
         }
       </div>
@@ -44,8 +44,8 @@
       </div>
 
       <div class="upload-section">
-        <input type="file" multiple />
-        <button>Hochladen</button>
+        <input type="file" #fileInput multiple />
+        <button (click)=toMetadataPage(fileInput)>Hochladen</button>
       </div>
     </div>
   </div>

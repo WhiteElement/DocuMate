@@ -3,7 +3,7 @@
 namespace DokuMate.Document;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class DocumentController : ControllerBase
 {
     private readonly DocumentService _documentService;
