@@ -34,7 +34,18 @@
     </div>
 
     <div class="available-tags">
-      <h3>Verfügbare Tags</h3>
+      <h3>
+        Verfügbare Tags
+        <button class="small-btn" (click)="toggleAddTagInput()">➕</button>
+      </h3>
+
+      @if (showAddTagInput) {
+      <div class="tag-input-row">
+        <input [(ngModel)]="newTagName" placeholder="Neues Tag..." />
+        <button class="small-btn" (click)="createTag()">Hinzufügen</button>
+      </div>
+      }
+
       <!--<div class="tag-chip available" *ngFor="let tag of allTags" (click)="addTag(tag)">-->
       @for (tag of tags; track tag.id) {
       <div class="tag-chip available" (click)="addToDocument(tag)">{{ tag.name }}</div>

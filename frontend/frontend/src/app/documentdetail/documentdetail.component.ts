@@ -5,11 +5,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Tag } from '../../model/tag.model';
 import { TagService } from '../../service/tag.service';
 import { forkJoin } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-documentdetail',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './documentdetail.component.html',
   styleUrl: './documentdetail.component.css'
 })
@@ -17,6 +18,9 @@ export class DocumentdetailComponent implements OnInit {
 
   document: DocumentOverview;
   tags: Tag[];
+
+  showAddTagInput = false;
+  newTagName = '';
 
   constructor(private documentService: DocumentService, private tagService: TagService, private route: ActivatedRoute) {
 
@@ -64,5 +68,21 @@ export class DocumentdetailComponent implements OnInit {
     return allTags.filter(t => !bodyTags.includes(t.name));
   }
 
+  toggleAddTagInput() {
+    this.showAddTagInput = !this.showAddTagInput;
+    this.newTagName = '';
+  }
 
+  createTag() {
+    const trimmedInput = this.newTagName.trim();
+    if (trimmedInput) {
+      this.tagService.createOne(trimmedInput).subscribe(res => {
+        if (res.status.toString().startsWith("2")) {
+          this.tags.push(res.body);
+          this.newTagName = '';
+          this.showAddTagInput = false;
+        }
+      });
+    }
+  }
 }

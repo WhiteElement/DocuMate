@@ -16,9 +16,9 @@ export class TagService {
     return this.http.get<Tag[]>(this.baseUrl, { observe: 'response' })
   }
 
-  createOne(name: string): Observable<HttpResponse<Object>> {
+  createOne(name: string): Observable<HttpResponse<Tag>> {
     const newTag: Tag = { name: name, id: '' };
-    return this.http.post(this.baseUrl, newTag, { observe: 'response' });
+    return this.http.post<Tag>(this.baseUrl, newTag, { observe: 'response' });
   }
 
   deleteOne(id: string): Observable<HttpResponse<Object>> {
