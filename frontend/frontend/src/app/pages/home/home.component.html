@@ -25,16 +25,13 @@
       </div>
 
       <div class="results">
+        @for (document of documents; track document.id) {
         <div class="result-item">
-          <div class="result-title">Mietvertrag 2024.pdf</div>
-          <div class="result-tags">#Vertrag, #Genehmigt</div>
-          <div class="result-date">01. März 2024</div>
+          <div class="result-title">{{ document.name }}</div>
+          <div class="result-tags">{{ document.tags }}</div>
+          <div class="result-date">{{ document.created }}</div>
         </div>
-        <div class="result-item">
-          <div class="result-title">Rechnung Fahrradladen</div>
-          <div class="result-tags">#Rechnung, #Offen</div>
-          <div class="result-date">15. Februar 2024</div>
-        </div>
+        }
       </div>
     </div>
 
