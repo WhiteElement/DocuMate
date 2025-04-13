@@ -15,6 +15,14 @@ export class DocumentService {
     return this.http.get<DocumentOverview[]>(this.baseUrl)
   }
 
+  getOne(id: string): Observable<DocumentOverview> {
+    if (id === '')
+      return null;
+
+    const url = `${this.baseUrl}/${id}`;
+    return this.http.get<DocumentOverview>(url)
+  }
+
   createOne(formData: FormData): Observable<DocumentOverview> {
     return this.http.post<DocumentOverview>(this.baseUrl, formData);
   }

@@ -4,6 +4,7 @@ export class DocumentOverview {
   info: string
   //tags: Tag[];
   created: Date;
+  ocrContent: string;
 
   //constructor() { }
 }

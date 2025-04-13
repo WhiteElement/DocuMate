@@ -1,36 +1,29 @@
 <div class="doc-detail-container">
 
-  <!-- Haupttitel -->
-  <h2>DOCUMENT NAME</h2>
+  <h2>{{ document.name }}</h2>
 
-  <!-- Metadaten & Actions -->
   <div class="meta-box">
-    <!--<p><strong>Beschreibung:</strong> {{ document.description }}</p>-->
+    <p><strong>Beschreibung:</strong> {{ document.info }}</p>
     <!--<p><strong>Tags:</strong> {{ document.tags.join(', ') }}</p>-->
-    <p><strong>Beschreibung:</strong> BESCHREIBUNG</p>
-    <p><strong>Tags:</strong> TAGS</p>
 
     <!--<button (click)="download()">📥 Download PDF</button>-->
-    <button>📥 Download PDF</button>
+    <button>Download PDF</button>
     <!--<button class="ocr-btn" (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false">-->
     <button class="ocr-btn">
-      🔍 OCR anzeigen
+      OCR anzeigen
     </button>
 
     <div class="tooltip">
-      <!--<pre>{{ document.ocrContent }}</pre>-->
-      <pre>DOCUMENT OCR</pre>
+      <pre>{{ document.ocrContent }}</pre>
 
     </div>
   </div>
 
-  <!-- PDF Vorschau -->
   <div class="pdf-preview">
     PREVIEW
     <!--<iframe [src]="pdfUrl | safe" width="100%" height="400px"></iframe>-->
   </div>
 
-  <!-- Tags Zuweisung -->
   <div class="tag-manager">
     <div class="assigned-tags">
       <h3>Zugewiesene Tags</h3>
