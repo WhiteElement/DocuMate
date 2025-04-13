@@ -19,4 +19,8 @@
         <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.10.0.20241108" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\" />
+    </ItemGroup>
+
 </Project>

@@ -1,6 +1,7 @@
 backend/DokuMate/bin
 backend/DokuMate/obj
 backend/DokuMate/.idea
+backend/DokuMate/wwwroot
 backend/DokuMate/DokuMate.sln.DotSettings.user
 
 frontend/frontend/.idea
