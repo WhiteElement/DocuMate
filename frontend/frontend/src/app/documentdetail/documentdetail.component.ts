@@ -32,15 +32,18 @@ export class DocumentdetailComponent implements OnInit {
       forkJoin([getDoc, getTags]).subscribe(([doc, tagsResponse]) => {
         this.document = doc;
 
+        const bodyTags = doc.tags.map(x => x.name);
         const allTags = tagsResponse.body;
-        const filteredTags = allTags.filter(t => !doc.tags.includes(t));
+        const filteredTags = allTags.filter(t => !bodyTags.includes(t.name));
         this.tags = filteredTags;
       });
     });
   }
 
   addToDocument(tag: Tag) {
-
+    this.documentService.updateOne(this.document, tag).subscribe(res => {
+    });
+    this.tags = this.tags.filter(t => t != tag);
   }
 
   removeTag(tag: Tag) {

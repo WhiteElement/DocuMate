@@ -44,6 +44,18 @@ public class DocumentController : ControllerBase
     }
     
     //
+    // PUT
+    //
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateOne([FromBody] PdfDocumentDTO pdfDocumentDto)
+    {
+        if (await _documentService.UpdateOne(pdfDocumentDto))
+            return Ok();
+
+        return NotFound();
+    }
+    
+    //
     // POST
     //
     

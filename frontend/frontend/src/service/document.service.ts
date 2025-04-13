@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DocumentOverview } from '../model/document-overview.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Tag } from '../model/tag.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +26,17 @@ export class DocumentService {
 
   createOne(formData: FormData): Observable<DocumentOverview> {
     return this.http.post<DocumentOverview>(this.baseUrl, formData);
+  }
+
+  updateOne(document: DocumentOverview, tag: Tag): Observable<HttpResponse<Object>> {
+    document.tags.push(tag);
+
+    const url = `${this.baseUrl}/${document.id}`;
+    return this.http.put(url, JSON.stringify(document), {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      observe: 'response'
+    });
   }
 }

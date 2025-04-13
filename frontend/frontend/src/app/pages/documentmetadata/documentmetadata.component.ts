@@ -30,10 +30,7 @@ export class DocumentmetadataComponent {
     formData.append('Info', this.metadata.Info);
     this.files.forEach(f => formData.append('Images', f));
 
-    console.log("Formdata", formData);
-
     this.documentService.createOne(formData).subscribe(doc => {
-      console.log("response", doc);
       this.router.navigate(['/document', doc.id]);
     });
   }

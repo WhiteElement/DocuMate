@@ -87,11 +87,6 @@ public class DocumentService
          pdfConverter.CleanUp();
      }
 
-     public async Task EditOne(PdfDocument document)
-     {
-         await _documentCollection.ReplaceOneAsync(x => x.Id == document.Id, document);
-     }
-
      public async Task<bool> DeleteOne(string id)
      {
          var result = await _documentCollection.DeleteOneAsync(x => x.Id == id);
@@ -111,5 +106,20 @@ public class DocumentService
          }
 
          return null;
+     }
+
+     public async Task<bool> UpdateOne(PdfDocumentDTO pdfDocumentDto)
+     {
+         if (!TryGet(pdfDocumentDto.Id, out PdfDocument document))
+         {
+             return false;
+         }
+
+         document.Tags = pdfDocumentDto.Tags;
+         document.Name = pdfDocumentDto.Name;
+         document.Info = pdfDocumentDto.Info;
+
+         await _documentCollection.ReplaceOneAsync(x => x.Id == document.Id, document);
+         return true;
      }
 }
