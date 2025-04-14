@@ -1,55 +1,57 @@
 <div class="doc-detail-container">
+  <div class="header-row">
+    <input [(ngModel)]="document.name" class="title-input" />
+    <button class="save-btn" (click)="updateDocument()">Speichern</button>
+  </div>
 
-  <h2>{{ document.name }}</h2>
+  <div class="info-box">
+    <span class="info-label">📝 Hinweise zum Dokument</span>
+    <textarea [(ngModel)]="document.info" rows="3" class="info-textarea"></textarea>
+  </div>
+  <div class="tag-section">
+    <h3>Tags</h3>
+    <div class="tag-groups">
+      <div class="assigned-tags">
+        <span class="section-label">Zugewiesen</span>
+        @for (tag of document.tags; track tag.id) {
+        <div class="tag-chip assigned" (click)="removeTag(tag)">
+          {{ tag.name }}
+        </div>
+        }
+      </div>
 
-  <div class="meta-box">
-    <p><strong>Beschreibung:</strong> {{ document.info }}</p>
-    <!--<p><strong>Tags:</strong> {{ document.tags.join(', ') }}</p>-->
+      <div class="available-tags">
+        <span class="section-label">Verfügbar</span>
+        <button class="small-btn" (click)="toggleAddTagInput()">➕</button>
 
-    <!--<button (click)="download()">📥 Download PDF</button>-->
-    <button>Download PDF</button>
-    <!--<button class="ocr-btn" (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false">-->
-    <button class="ocr-btn">
-      OCR anzeigen
-    </button>
+        @if (showAddTagInput) {
+        <div class="tag-input-row">
+          <input [(ngModel)]="newTagName" placeholder="Neues Tag..." />
+          <button class="small-btn" (click)="createTag()">Hinzufügen</button>
+        </div>
+        }
 
-    <div class="tooltip">
+        @for (tag of tags; track tag.id) {
+        <div class="tag-chip available" (click)="addToDocument(tag)">
+          {{ tag.name }}
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="pdf-ocr-wrapper">
+    <div class="pdf-preview">
+      <embed [src]="pdfUrl" width="100%" height="500" type="application/pdf" />
+    </div>
+
+    <div class="ocr-panel" [class.hidden]="!showOcr">
+      <h4>OCR Inhalt</h4>
       <pre>{{ document.ocrContent }}</pre>
     </div>
   </div>
 
-  <div class="pdf-preview">
-    <embed [src]="pdfUrl" width="400" height="500" type="application/pdf" />
-    <div>
-
-      <div class="tag-manager">
-        <div class="assigned-tags">
-          <h3>Zugewiesene Tags</h3>
-
-          @for (tag of document.tags; track tag.id) {
-          <div class="tag-chip assigned" (click)="removeTag(tag)">{{ tag.name }}</div>
-          }
-        </div>
-
-        <div class="available-tags">
-          <h3>
-            Verfügbare Tags
-            <button class="small-btn" (click)="toggleAddTagInput()">➕</button>
-          </h3>
-
-          @if (showAddTagInput) {
-          <div class="tag-input-row">
-            <input [(ngModel)]="newTagName" placeholder="Neues Tag..." />
-            <button class="small-btn" (click)="createTag()">Hinzufügen</button>
-          </div>
-          }
-
-          @for (tag of tags; track tag.id) {
-          <div class="tag-chip available" (click)="addToDocument(tag)">{{ tag.name }}</div>
-          }
-          <!--<div class="tag-chip available" *ngFor="let tag of allTags">-->
-          <!--  {{ tag }}-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
+  <button class="toggle-ocr-btn" (click)="showOcr = !showOcr">
+    {{ showOcr ? 'OCR ausblenden' : 'OCR anzeigen' }}
+  </button>
+</div>

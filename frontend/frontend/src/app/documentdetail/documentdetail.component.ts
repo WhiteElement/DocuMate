@@ -20,11 +20,13 @@ export class DocumentdetailComponent implements OnInit {
   // TODO: pipe null-values in document.info
 
   document: DocumentOverview;
+
   tags: Tag[];
 
   showAddTagInput = false;
   newTagName = '';
   pdfUrl: SafeResourceUrl;
+  showOcr = false;
 
   constructor(private documentService: DocumentService, private tagService: TagService, private route: ActivatedRoute, private sanitizer: DomSanitizer) {
 
@@ -96,4 +98,6 @@ export class DocumentdetailComponent implements OnInit {
       });
     }
   }
+
+  updateDocument() { }
 }
