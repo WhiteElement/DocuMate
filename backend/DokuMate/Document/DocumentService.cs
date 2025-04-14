@@ -71,6 +71,7 @@ public class DocumentService
          };
 
          await _documentCollection.InsertOneAsync(document);
+         // TODO: Bug, dass es nicht immer zuende ausgeführt wird
          _ = Task.Run(() => AddOcrAsync(document, pdf, pdfConverter));
 
          return document;
