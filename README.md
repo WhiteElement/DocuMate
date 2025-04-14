@@ -1,4 +1,4 @@
-# DocuMate – Dokumentenmanagement mit Docuemnt Scan, OCR & Tagging
+# DocuMate – Dokumentenmanagement mit Document Scan, OCR & Tagging
 
 **DocuMate** ist eine Webanwendung zur Organisation, Verschlagwortung und Volltextsuche von PDF-Dokumenten.
 Abfotografierte Dokumente sind die Basis hierfür. Diese können hochgeladen werden, woraufhin eine Perspektivkorrektur vorgenommen wird, ein Pdf erzeugt und OCR durchgefürt wird.
