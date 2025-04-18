@@ -59,7 +59,8 @@ public class DocumentService
 
          PdfConverter pdfConverter = new PdfConverter(imageDocument.Name, imageDocument.Images, false);
          pdfConverter.DocumentScan();
-         string pdf = pdfConverter.ToPdf();
+         (string pdf, string firstPage) = pdfConverter.ToPdf();
+         
 
          PdfDocument document = new PdfDocument()
          {
@@ -71,23 +72,27 @@ public class DocumentService
          };
 
          await _documentCollection.InsertOneAsync(document);
-         // TODO: Bug, dass es nicht immer zuende ausgeführt wird
-         _ = Task.Run(() => AddOcrAsync(document, pdf, pdfConverter));
+         _ = Task.Run(() => AddOcrAsync(document, firstPage, pdfConverter));
 
          return document;
      }
 
-     private async Task AddOcrAsync(PdfDocument document, string pdf, PdfConverter pdfConverter)
+     private async Task AddOcrAsync(PdfDocument document, string image, PdfConverter pdfConverter)
      {
-         OpticalCharacterRecognizer ocr = new OpticalCharacterRecognizer() { Pdf = pdf };
-         Console.WriteLine("started ocr");
-         document.OcrContent = ocr.DoOcr();
-         Console.WriteLine("finished ocr");
+         try {
+             OpticalCharacterRecognizer ocr = new OpticalCharacterRecognizer() { Image = image };
+             document.OcrContent = await ocr.DoOcr();
 
-         await _documentCollection.ReplaceOneAsync(x => x.Id == document.Id, document);
-         Console.WriteLine($"Updated {document.Id}, added ocr\n{document.OcrContent}");
-         
-         pdfConverter.CleanUp();
+             await _documentCollection.ReplaceOneAsync(x => x.Id == document.Id, document);
+             Console.WriteLine($"Updated {document.Id}, added ocr\n{document.OcrContent}");
+
+             pdfConverter.CleanUp();
+
+         }
+         catch (Exception e)
+         {
+             Console.WriteLine($"Error doing OCR: {e}");
+         }
      }
 
      public async Task<bool> DeleteOne(string id)

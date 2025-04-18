@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
 
   }
 
+  // TODO: add errorhandling for when no response is comming => no db conn)
   ngOnInit(): void {
     this.documentService.getAll().subscribe(docs => {
       this.documents = docs;

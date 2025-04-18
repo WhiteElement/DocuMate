@@ -33,7 +33,7 @@ public class PdfConverter
         _images.ForEach(image => _tracker.Add(image));
     }
 
-    public string ToPdf()
+    public (string pdf, string firstPage) ToPdf()
     {
         _pdf = new FileInfo(Path.Combine(_tempFolder, _name));
         _tracker.Add(_pdf);
@@ -57,7 +57,7 @@ public class PdfConverter
             pdfDocument.Close();
         }
 
-        return _pdf.FullName;
+        return (_pdf.FullName, _images[0].FullName);
     }
 
     public void CleanUp()
