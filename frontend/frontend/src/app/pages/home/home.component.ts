@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { TagService } from '../../../service/tag.service';
 import { Tag } from '../../../model/tag.model';
 import { FormsModule } from '@angular/forms';
+import { Searchrequest } from '../../../model/searchrequest.model';
 
 @Component({
   selector: 'app-home',
@@ -38,7 +39,7 @@ export class HomeComponent implements OnInit {
   }
 
   search(): void {
-    const filter: any = { Name: this.searchBar || "", Tags: this.selectedTags, Id: "sfsdf", Info: "sf", Created: new Date(), OcrContent: "sfsdf" };
+    const filter: Searchrequest = { Name: this.searchBar || "", Tags: this.selectedTags };
     //const filter: DocumentOverview = { Name: this.searchBar, tags: this.selectedTags, id: "sfsdf", info: "sf", created: new Date(), ocrContent: "sfsdf" };
     this.documentService.getAllFiltered(filter).subscribe(docs => {
       this.documents = docs;

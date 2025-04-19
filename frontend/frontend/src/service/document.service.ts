@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DocumentOverview } from '../model/document-overview.model';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Searchrequest } from '../model/searchrequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class DocumentService {
     return this.http.get<DocumentOverview[]>(this.baseUrl)
   }
 
-  getAllFiltered(doc: any): Observable<DocumentOverview[]> {
+  getAllFiltered(doc: Searchrequest): Observable<DocumentOverview[]> {
     return this.http.post<DocumentOverview[]>(`${this.baseUrl}/search`, JSON.stringify(doc), {
       headers: {
         "Content-Type": "application/json"
