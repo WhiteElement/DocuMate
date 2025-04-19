@@ -112,6 +112,12 @@ h1 {
   color: white;
 }
 
+.tag.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
 /* Results */
 .results {
   display: flex;

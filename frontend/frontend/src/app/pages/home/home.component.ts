@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { DocumentOverview } from '../../../model/document-overview.model';
 import { DocumentService } from '../../../service/document.service';
 import { UploadstateService } from '../../../service/uploadstate.service';
@@ -6,11 +6,12 @@ import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { TagService } from '../../../service/tag.service';
 import { Tag } from '../../../model/tag.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -18,6 +19,8 @@ export class HomeComponent implements OnInit {
 
   documents: DocumentOverview[];
   tags: Tag[];
+  selectedTags: Tag[] = [];
+  searchBar: string;
 
   constructor(private router: Router, private documentService: DocumentService, private uploadstateService: UploadstateService, private tagService: TagService) {
 
@@ -34,6 +37,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  search(): void {
+  }
+
 
   toMetadataPage(fileInput: HTMLInputElement): void {
     const files = fileInput.files;
@@ -44,6 +50,15 @@ export class HomeComponent implements OnInit {
 
   toDetailsPage(id: string) {
     this.router.navigate(['/document', id]);
+  }
+
+  toggleSelection(tag: Tag) {
+    const idx = this.selectedTags.indexOf(tag);
+    if (idx !== -1) {
+      this.selectedTags.splice(idx);
+    } else {
+      this.selectedTags.push(tag)
+    }
   }
 
 }
