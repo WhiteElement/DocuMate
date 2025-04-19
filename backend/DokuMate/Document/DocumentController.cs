@@ -23,6 +23,12 @@ public class DocumentController : ControllerBase
         return await _documentService.GetAll();
     }
 
+    [HttpPost("search")]
+    public async Task<List<PdfDocumentDTO>> GetAllFiltered([FromBody] PdfDocumentDTO filter)
+    {
+        return await _documentService.GetAllFiltered(filter);
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<PdfDocumentDTO>> GetOne([FromRoute] string id)
     {

@@ -38,6 +38,11 @@ export class HomeComponent implements OnInit {
   }
 
   search(): void {
+    const filter: any = { Name: this.searchBar || "", Tags: this.selectedTags, Id: "sfsdf", Info: "sf", Created: new Date(), OcrContent: "sfsdf" };
+    //const filter: DocumentOverview = { Name: this.searchBar, tags: this.selectedTags, id: "sfsdf", info: "sf", created: new Date(), ocrContent: "sfsdf" };
+    this.documentService.getAllFiltered(filter).subscribe(docs => {
+      this.documents = docs;
+    });
   }
 
 

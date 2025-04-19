@@ -25,6 +25,15 @@ public class DocumentService
              .Select(d => new PdfDocumentDTO( d.Id, d.Name, d.Info, d.Tags, d.Created, null ))
              .ToList();
      }
+     
+     public async Task<List<PdfDocumentDTO>> GetAllFiltered(PdfDocumentDTO filter)
+     {
+         return _documentCollection.AsQueryable()
+             .Where(x => x.Name.Contains(filter.Name))
+             // .Where(x => x.Name.Contains(filter.Name) && filter.Tags.All(tag => x.Tags.Contains(tag)))
+             .Select(d => new PdfDocumentDTO( d.Id, d.Name, d.Info, d.Tags, d.Created, null ))
+             .ToList();
+     }
 
      public async Task<PdfDocumentDTO?> GetOne(string id)
      {
