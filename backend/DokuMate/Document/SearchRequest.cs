@@ -1,3 +1,3 @@
 ﻿namespace DokuMate.Document;
 
-public record SearchRequest();
+public record SearchRequest(string Name, List<Tag.Tag> Tags);

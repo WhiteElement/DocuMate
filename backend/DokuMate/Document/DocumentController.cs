@@ -24,7 +24,7 @@ public class DocumentController : ControllerBase
     }
 
     [HttpPost("search")]
-    public async Task<List<PdfDocumentDTO>> GetAllFiltered([FromBody] PdfDocumentDTO filter)
+    public async Task<List<PdfDocumentDTO>> GetAllFiltered([FromBody] SearchRequest filter)
     {
         return await _documentService.GetAllFiltered(filter);
     }

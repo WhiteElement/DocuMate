@@ -99,5 +99,13 @@ export class DocumentdetailComponent implements OnInit {
     }
   }
 
-  updateDocument() { }
+  updateDocument() {
+    // rest call
+
+    this.documentService.updateOne(this.document).subscribe(res => {
+      if (res.status.toString().startsWith('2'))
+        console.log('success');
+    })
+
+  }
 }
