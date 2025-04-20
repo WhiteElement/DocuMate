@@ -29,9 +29,7 @@ export class HomeComponent implements OnInit {
 
   // TODO: add errorhandling for when no response is comming => no db conn)
   ngOnInit(): void {
-    this.documentService.getAll().subscribe(docs => {
-      this.documents = docs;
-    });
+    this.search();
 
     this.tagService.getAll().subscribe(tagResponse => {
       this.tags = tagResponse.body;
@@ -39,11 +37,21 @@ export class HomeComponent implements OnInit {
   }
 
   search(): void {
-    const filter: Searchrequest = { Name: this.searchBar || "", Tags: this.selectedTags };
-    //const filter: DocumentOverview = { Name: this.searchBar, tags: this.selectedTags, id: "sfsdf", info: "sf", created: new Date(), ocrContent: "sfsdf" };
-    this.documentService.getAllFiltered(filter).subscribe(docs => {
-      this.documents = docs;
-    });
+    if (this.fullSearch()) {
+      this.documentService.getAll().subscribe(docs => {
+        this.documents = docs;
+      });
+    } else {
+      const filter: Searchrequest = { Name: this.searchBar || "", Tags: this.selectedTags };
+      this.documentService.getAllFiltered(filter).subscribe(docs => {
+        this.documents = docs;
+      });
+    }
+  }
+
+  fullSearch(): boolean {
+    return (this.searchBar === undefined || this.searchBar === '')
+      && (this.selectedTags === undefined || this.selectedTags.length === 0);
   }
 
 

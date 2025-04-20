@@ -2,6 +2,7 @@
 using DokuMate.Helpers;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace DokuMate.Document;
 
@@ -26,12 +27,13 @@ public class DocumentService
              .ToList();
      }
      
-     public async Task<List<PdfDocumentDTO>> GetAllFiltered(SearchRequest filter)
+     public async Task<List<PdfDocumentDTO>> GetAllFiltered(SearchRequest filterItem)
      {
+         FilterDefinition<PdfDocument> filter = Builders<PdfDocument>.Filter
+             .All(doc => doc.Tags, filterItem.Tags);
+             
          return _documentCollection.AsQueryable()
-             // .Where(x => x.Name.Contains(filter.Name))
-             .Where(docs => filter.Tags.All(t => docs.Tags.Contains(t)))
-             // .Where(x => x.Name.Contains(filter.Name) && filter.Tags.All(tag => x.Tags.Contains(tag)))
+             .Where(x => x.Name.Contains(filterItem.Name) && filter.Inject())
              .Select(d => new PdfDocumentDTO( d.Id, d.Name, d.Info, d.Tags, d.Created, null ))
              .ToList();
      }
